@@ -1,0 +1,24 @@
+{
+  "name": "educonnect-server",
+  "version": "1.0.0",
+  "description": "Backend API for EduConnect - Unified Student Opportunity Platform",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "seed": "node src/seed/seedData.js",
+    "test": "node src/tests/runTests.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "firebase-admin": "^14.3.0",
+    "mongodb-memory-server": "^10.1.3",
+    "mongoose": "^8.9.5",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

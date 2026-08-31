@@ -1,0 +1,29 @@
+{
+  "name": "educonnect",
+  "version": "1.0.0",
+  "description": "EduConnect - Unified Student Opportunity Platform",
+  "scripts": {
+    "setup": "npm install && npm --prefix server install && npm --prefix client install",
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue,green\" \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "start": "concurrently -n \"SERVER,CLIENT\" -c \"blue,green\" \"npm --prefix server start\" \"npm --prefix client start\"",
+    "server": "npm --prefix server start",
+    "server:dev": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "client:build": "npm --prefix client run build",
+    "seed": "npm --prefix server run seed",
+    "test": "npm --prefix server test",
+    "test:server": "npm --prefix server test"
+  },
+  "keywords": [
+    "mern",
+    "student-opportunities",
+    "recommendation-engine",
+    "machine-learning"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}

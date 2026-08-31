@@ -1,0 +1,441 @@
+{
+  "students": [
+    {
+      "_id": "6a926309ab9e05ba20e2edfa",
+      "firebaseUID": "std-1787978505782",
+      "name": "Ananya Rao",
+      "email": "ananya.1787978505722@college.edu",
+      "password": "$2a$10$N9wXFvC19pUh2C8MxsutVOH7zA0.twCUIJvHQeTYae5pNQ1RFvuwK",
+      "department": "Information Technology",
+      "year": 4,
+      "cgpa": 9.25,
+      "skills": [
+        "AWS",
+        "Docker",
+        "Python",
+        "React"
+      ],
+      "interests": [
+        "Internships",
+        "Cloud Computing"
+      ],
+      "createdAt": "2026-08-29T04:41:45.877Z",
+      "__v": 0
+    }
+  ],
+  "applications": [
+    {
+      "_id": "6a926309ab9e05ba20e2ee03",
+      "studentId": "6a926309ab9e05ba20e2edfa",
+      "opportunityId": "6a925f66dface60c7c05e385",
+      "opportunityTitle": "NPTEL Elite Certification: Recommender Systems and Data Analytics",
+      "opportunityType": "certification",
+      "opportunityOrg": "IIT Kharagpur and NPTEL",
+      "opportunityUrl": "https://nptel.ac.in",
+      "status": "Submitted",
+      "submissionDate": "2026-08-29T04:41:45.930Z",
+      "responses": {
+        "resumeUrl": "https://drive.google.com/test-resume"
+      },
+      "__v": 0
+    }
+  ],
+  "opportunities": [
+    {
+      "_id": "6a925f66dface60c7c05e37b",
+      "__v": 0,
+      "deadline": "2026-09-28T04:41:43.502Z",
+      "description": "Government scholarship scheme awarding financial grants to undergraduate and postgraduate students with distinguished academic records.",
+      "eligibility": {
+        "department": [
+          "All"
+        ],
+        "minYear": 1,
+        "minCGPA": 7,
+        "skills": []
+      },
+      "location": "National / All States",
+      "officialUrl": "https://scholarships.gov.in",
+      "organization": "Ministry of Education and NSP",
+      "postedDate": "2026-08-29T04:41:43.502Z",
+      "stipendOrReward": "INR 50,000 / year grant",
+      "tags": [
+        "scholarship",
+        "merit",
+        "financial aid",
+        "government"
+      ],
+      "title": "National Scholarship Portal Post-Matric Merit Scheme",
+      "type": "scholarship"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e37c",
+      "__v": 0,
+      "deadline": "2026-10-13T04:41:43.502Z",
+      "description": "Empowering undergraduate students in computer science and technology through educational funding, professional network building, and mentorship.",
+      "eligibility": {
+        "department": [
+          "Computer Science",
+          "Information Technology",
+          "Data Science",
+          "Software Engineering"
+        ],
+        "minYear": 2,
+        "minCGPA": 8,
+        "skills": [
+          "Python",
+          "C++",
+          "Java",
+          "Data Structures"
+        ]
+      },
+      "location": "Remote / Asia Pacific",
+      "officialUrl": "https://buildyourfuture.withgoogle.com/scholarships",
+      "organization": "Google",
+      "postedDate": "2026-08-29T04:41:43.502Z",
+      "stipendOrReward": "USD 2,500 grant and Google Mentorship",
+      "tags": [
+        "scholarship",
+        "diversity",
+        "google",
+        "computer science"
+      ],
+      "title": "Google Generation Scholarship (Asia Pacific)",
+      "type": "scholarship"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e37d",
+      "__v": 0,
+      "deadline": "2026-09-18T04:41:43.502Z",
+      "description": "Competitive scholarship designed to support outstanding undergraduate students pursuing degrees in engineering, science, and technology disciplines.",
+      "eligibility": {
+        "department": [
+          "Computer Science",
+          "Information Technology",
+          "Electronics & Communication",
+          "Mechanical",
+          "Electrical"
+        ],
+        "minYear": 1,
+        "minCGPA": 7.5,
+        "skills": []
+      },
+      "location": "India",
+      "officialUrl": "https://www.scholarships.reliancefoundation.org",
+      "organization": "Reliance Foundation",
+      "postedDate": "2026-08-29T04:41:43.502Z",
+      "stipendOrReward": "INR 2,00,000 overall degree grant",
+      "tags": [
+        "scholarship",
+        "engineering",
+        "reliance",
+        "stem"
+      ],
+      "title": "Reliance Foundation Undergraduate Scholarship",
+      "type": "scholarship"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e37e",
+      "__v": 0,
+      "deadline": "2026-09-13T04:41:43.502Z",
+      "description": "Join an agile engineering team building modern enterprise portals. Responsible for developing RESTful APIs, React frontends, and optimizing MongoDB queries.",
+      "eligibility": {
+        "department": [
+          "Computer Science",
+          "Information Technology",
+          "Software Engineering"
+        ],
+        "minYear": 2,
+        "minCGPA": 7,
+        "skills": [
+          "React",
+          "Node.js",
+          "Express",
+          "MongoDB",
+          "JavaScript"
+        ]
+      },
+      "location": "Bengaluru / Hybrid",
+      "officialUrl": "https://internshala.com",
+      "organization": "Zeta Technologies",
+      "postedDate": "2026-08-29T04:41:43.502Z",
+      "stipendOrReward": "INR 25,000 / month stipend",
+      "tags": [
+        "internship",
+        "web development",
+        "mern",
+        "fullstack",
+        "react"
+      ],
+      "title": "Full-Stack MERN Developer Intern",
+      "type": "internship"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e37f",
+      "__v": 0,
+      "deadline": "2026-09-23T04:41:43.502Z",
+      "description": "Conduct exploratory data analysis, implement NLP transformer models, and benchmark recommender algorithms on large real-world datasets.",
+      "eligibility": {
+        "department": [
+          "Computer Science",
+          "Data Science",
+          "Information Technology",
+          "Artificial Intelligence"
+        ],
+        "minYear": 3,
+        "minCGPA": 8,
+        "skills": [
+          "Python",
+          "Machine Learning",
+          "TensorFlow",
+          "PyTorch",
+          "SQL"
+        ]
+      },
+      "location": "Remote",
+      "officialUrl": "https://www.linkedin.com/jobs",
+      "organization": "NeuralWave AI Labs",
+      "postedDate": "2026-08-29T04:41:43.502Z",
+      "stipendOrReward": "INR 35,000 / month stipend",
+      "tags": [
+        "internship",
+        "ai",
+        "machine learning",
+        "data science",
+        "python"
+      ],
+      "title": "AI and Data Science Research Intern",
+      "type": "internship"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e380",
+      "__v": 0,
+      "deadline": "2026-09-16T04:41:43.502Z",
+      "description": "Work with infrastructure engineers to automate CI/CD pipelines, manage Docker containers, and deploy microservices on AWS.",
+      "eligibility": {
+        "department": [
+          "Computer Science",
+          "Information Technology",
+          "Electronics & Communication"
+        ],
+        "minYear": 2,
+        "minCGPA": 7.2,
+        "skills": [
+          "Linux",
+          "Docker",
+          "AWS",
+          "Git",
+          "Python"
+        ]
+      },
+      "location": "Hyderabad / Hybrid",
+      "officialUrl": "https://unstop.com/internships",
+      "organization": "CloudScale Solutions",
+      "postedDate": "2026-08-29T04:41:43.502Z",
+      "stipendOrReward": "INR 28,000 / month stipend",
+      "tags": [
+        "internship",
+        "cloud",
+        "devops",
+        "aws",
+        "docker"
+      ],
+      "title": "Cloud Systems and DevOps Intern",
+      "type": "internship"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e381",
+      "__v": 0,
+      "deadline": "2026-10-08T04:41:43.502Z",
+      "description": "Nationwide 36-hour hackathon providing students a platform to solve pressing challenges faced by government ministries, departments, and industries.",
+      "eligibility": {
+        "department": [
+          "All"
+        ],
+        "minYear": 1,
+        "minCGPA": 6,
+        "skills": [
+          "Problem Solving",
+          "Git",
+          "Team Collaboration"
+        ]
+      },
+      "location": "National Nodal Centers / Hybrid",
+      "officialUrl": "https://www.sih.gov.in",
+      "organization": "Ministry of Education and AICTE",
+      "postedDate": "2026-08-29T04:41:43.502Z",
+      "stipendOrReward": "INR 1,00,000 grand prize per problem statement",
+      "tags": [
+        "hackathon",
+        "sih",
+        "innovation",
+        "government"
+      ],
+      "title": "Smart India Hackathon (SIH) 2026",
+      "type": "hackathon"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e382",
+      "__v": 0,
+      "deadline": "2026-09-10T04:41:43.502Z",
+      "description": "Design and build high-impact payment solutions, fraud detection algorithms, or smart budgeting agents.",
+      "eligibility": {
+        "department": [
+          "Computer Science",
+          "Information Technology",
+          "Data Science"
+        ],
+        "minYear": 2,
+        "minCGPA": 7,
+        "skills": [
+          "JavaScript",
+          "React",
+          "Node.js",
+          "API Integration"
+        ]
+      },
+      "location": "Virtual / Online",
+      "officialUrl": "https://unstop.com/hackathons",
+      "organization": "Unstop and Razorpay",
+      "postedDate": "2026-08-29T04:41:43.502Z",
+      "stipendOrReward": "INR 3,00,000 prize pool",
+      "tags": [
+        "hackathon",
+        "fintech",
+        "unstop",
+        "web development"
+      ],
+      "title": "FinTech Innovation Sprint 2026",
+      "type": "hackathon"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e383",
+      "__v": 0,
+      "deadline": "2026-09-20T04:41:43.502Z",
+      "description": "A 48-hour global sprint tackling sustainability, carbon tracking, renewable energy optimization, and smart agriculture.",
+      "eligibility": {
+        "department": [
+          "All"
+        ],
+        "minYear": 1,
+        "minCGPA": 6.5,
+        "skills": [
+          "Web Development",
+          "Python",
+          "IoT"
+        ]
+      },
+      "location": "Online / Global",
+      "officialUrl": "https://mlh.io/seasons/2026/events",
+      "organization": "Major League Hacking (MLH)",
+      "postedDate": "2026-08-29T04:41:43.502Z",
+      "stipendOrReward": "USD 10,000 prize pool and certificates",
+      "tags": [
+        "hackathon",
+        "mlh",
+        "greentech",
+        "iot"
+      ],
+      "title": "Global Climate and GreenTech Hackathon",
+      "type": "hackathon"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e384",
+      "__v": 0,
+      "deadline": "2026-10-28T04:41:43.503Z",
+      "description": "Foundational certification validating overall understanding of the AWS Cloud platform, core services, security, architecture, and pricing.",
+      "eligibility": {
+        "department": [
+          "Computer Science",
+          "Information Technology",
+          "Electronics & Communication",
+          "Data Science"
+        ],
+        "minYear": 1,
+        "minCGPA": 6.5,
+        "skills": [
+          "Cloud Computing",
+          "Networking Basics"
+        ]
+      },
+      "location": "Online Examination",
+      "officialUrl": "https://aws.amazon.com/certification/certified-cloud-practitioner/",
+      "organization": "Amazon Web Services (AWS) Academy",
+      "postedDate": "2026-08-29T04:41:43.503Z",
+      "stipendOrReward": "100% Exam Fee Waiver (USD 100 value)",
+      "tags": [
+        "certification",
+        "aws",
+        "cloud",
+        "exam voucher"
+      ],
+      "title": "AWS Certified Cloud Practitioner (Academic Voucher Program)",
+      "type": "certification"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e385",
+      "__v": 0,
+      "deadline": "2026-10-03T04:41:43.503Z",
+      "description": "12-week academic course covering collaborative filtering, rule-based systems, content-based recommendation engines, and user modeling.",
+      "eligibility": {
+        "department": [
+          "Computer Science",
+          "Information Technology",
+          "Data Science",
+          "Mathematics"
+        ],
+        "minYear": 2,
+        "minCGPA": 7,
+        "skills": [
+          "Data Structures",
+          "Python",
+          "Algorithms"
+        ]
+      },
+      "location": "Online Courses and NPTEL Test Centers",
+      "officialUrl": "https://nptel.ac.in",
+      "organization": "IIT Kharagpur and NPTEL",
+      "postedDate": "2026-08-29T04:41:43.503Z",
+      "stipendOrReward": "IIT-accredited 3 Credit Transfer Certificate",
+      "tags": [
+        "certification",
+        "nptel",
+        "recommender systems",
+        "iit"
+      ],
+      "title": "NPTEL Elite Certification: Recommender Systems and Data Analytics",
+      "type": "certification"
+    },
+    {
+      "_id": "6a925f66dface60c7c05e386",
+      "__v": 0,
+      "deadline": "2026-10-18T04:41:43.503Z",
+      "description": "Master deep learning fundamentals, neural network architecture, CNNs, RNNs, and hyperparameter tuning with hands-on labs.",
+      "eligibility": {
+        "department": [
+          "All"
+        ],
+        "minYear": 2,
+        "minCGPA": 7.5,
+        "skills": [
+          "Python",
+          "Linear Algebra"
+        ]
+      },
+      "location": "Online Self-Paced",
+      "officialUrl": "https://www.coursera.org/specializations/deep-learning",
+      "organization": "DeepLearning.AI and Coursera",
+      "postedDate": "2026-08-29T04:41:43.503Z",
+      "stipendOrReward": "Full Financial Aid Available and Verified Certificate",
+      "tags": [
+        "certification",
+        "coursera",
+        "deep learning",
+        "ai"
+      ],
+      "title": "Coursera Deep Learning Specialization by Andrew Ng",
+      "type": "certification"
+    }
+  ],
+  "savedAt": "2026-08-29T04:41:45.941Z"
+}
