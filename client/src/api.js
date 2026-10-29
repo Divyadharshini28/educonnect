@@ -7,10 +7,14 @@ const api = axios.create({
   }
 });
 
-let tokenGetter = () => localStorage.getItem('educonnect_token');
+let tokenGetter = () => null;
 
 export function setAuthTokenGetter(getter) {
   tokenGetter = getter;
+}
+
+export function clearAuthTokenGetter() {
+  tokenGetter = () => null;
 }
 
 // Interceptor to inject verified Firebase ID token
@@ -19,9 +23,12 @@ api.interceptors.request.use(async (config) => {
     const token = await tokenGetter();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      delete config.headers.Authorization;
     }
   } catch (err) {
     console.error('Error retrieving auth token for request:', err);
+    delete config.headers.Authorization;
   }
   return config;
 }, (error) => {

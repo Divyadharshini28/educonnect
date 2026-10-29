@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword, 
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   isFirebaseClientConfigured
 } from '../firebase';
 
@@ -20,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
 
-  // Hook dynamic token getter into API interceptor
+  // Hook dynamic token getter into API interceptor (authoritative Firebase token only)
   useEffect(() => {
     setAuthTokenGetter(async () => {
       if (auth && auth.currentUser) {
@@ -30,7 +31,7 @@ export const AuthProvider = ({ children }) => {
           console.error('Failed to retrieve Firebase ID token:', err);
         }
       }
-      return localStorage.getItem('educonnect_token');
+      return null;
     });
   }, []);
 
@@ -79,7 +80,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Register Student via Firebase Client SDK
-  const registerStudent = async ({ name, email, password, department, year, cgpa, skills, interests }) => {
+  const registerStudent = async ({ name, email, password, department, year, cgpa, skills, interests, preferredLocation }) => {
     setLoading(true);
     try {
       const authInstance = getFirebaseAuth();
@@ -100,7 +101,8 @@ export const AuthProvider = ({ children }) => {
           year: Number(year) || 1,
           cgpa: cgpa !== undefined ? Number(cgpa) : 0,
           skills: Array.isArray(skills) ? skills : [],
-          interests: Array.isArray(interests) ? interests : []
+          interests: Array.isArray(interests) ? interests : [],
+          preferredLocation: preferredLocation ? preferredLocation.trim() : ''
         },
         {
           headers: { Authorization: `Bearer ${idToken}` }
@@ -118,11 +120,13 @@ export const AuthProvider = ({ children }) => {
       let userFriendlyMessage = error.message;
 
       if (error.code === 'auth/email-already-in-use') {
-        userFriendlyMessage = 'This email address is already registered in Firebase. Please sign in instead.';
+        userFriendlyMessage = 'This email address is already registered. Please sign in instead.';
       } else if (error.code === 'auth/weak-password') {
         userFriendlyMessage = 'Password must be at least 6 characters long.';
       } else if (error.code === 'auth/invalid-email') {
         userFriendlyMessage = 'Please provide a valid email address.';
+      } else if (error.code === 'auth/network-request-failed') {
+        userFriendlyMessage = 'Network connection issue. Please check your internet connection and try again.';
       } else if (error.response?.data?.message) {
         userFriendlyMessage = error.response.data.message;
       }
@@ -177,6 +181,8 @@ export const AuthProvider = ({ children }) => {
         userFriendlyMessage = 'Please provide a valid email address.';
       } else if (error.code === 'auth/too-many-requests') {
         userFriendlyMessage = 'Too many failed login attempts. Please try again later.';
+      } else if (error.code === 'auth/network-request-failed') {
+        userFriendlyMessage = 'Network connection issue. Please check your internet connection and try again.';
       } else if (error.response?.data?.message) {
         userFriendlyMessage = error.response.data.message;
       }
@@ -193,6 +199,8 @@ export const AuthProvider = ({ children }) => {
       if (auth) {
         await signOut(auth);
       }
+    } catch (err) {
+      console.error('Error during signOut:', err);
     } finally {
       localStorage.removeItem('educonnect_token');
       localStorage.removeItem('educonnect_student');
@@ -201,11 +209,53 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Send Password Reset Email via Firebase Client SDK
+  const sendPasswordReset = async (email) => {
+    const trimmedEmail = (email || '').trim();
+    if (!trimmedEmail) {
+      return { success: false, message: 'Please enter your email address.' };
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      return { success: false, message: 'Please provide a valid email address.' };
+    }
+
+    try {
+      const authInstance = getFirebaseAuth();
+      await sendPasswordResetEmail(authInstance, trimmedEmail);
+      return { 
+        success: true, 
+        message: 'Password reset email sent. Please check your inbox.' 
+      };
+    } catch (error) {
+      console.error('Firebase password reset error:', error);
+      let userFriendlyMessage = 'Unable to send password reset email. Please try again.';
+
+      if (error.code === 'auth/user-not-found') {
+        // Do not expose unnecessary information about whether an account exists
+        return {
+          success: true,
+          message: 'If an account exists with this email, a password reset link has been sent.'
+        };
+      } else if (error.code === 'auth/invalid-email') {
+        userFriendlyMessage = 'Please provide a valid email address.';
+      } else if (error.code === 'auth/too-many-requests') {
+        userFriendlyMessage = 'Too many requests. Please try again later.';
+      } else if (error.code === 'auth/network-request-failed') {
+        userFriendlyMessage = 'Network connection issue. Please check your internet connection and try again.';
+      } else if (error.message) {
+        userFriendlyMessage = error.message;
+      }
+
+      return { success: false, message: userFriendlyMessage };
+    }
+  };
+
   // Update Profile
   const updateProfile = async (profileData) => {
     try {
       if (!auth || !auth.currentUser) {
-        throw new Error('You must be signed in with Firebase to update your profile.');
+        throw new Error('You must be signed in to update your profile.');
       }
       const idToken = await auth.currentUser.getIdToken();
 
@@ -225,17 +275,50 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Re-fetch current student profile from backend
+  const refreshStudentProfile = async () => {
+    try {
+      if (!auth || !auth.currentUser) return null;
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await api.get('/student/profile', {
+        headers: { Authorization: `Bearer ${idToken}` }
+      });
+      if (res.data) {
+        setStudentProfile(res.data);
+        localStorage.setItem('educonnect_student', JSON.stringify(res.data));
+        return res.data;
+      }
+    } catch (err) {
+      console.warn('Failed refreshing student profile:', err.message);
+    }
+    return null;
+  };
+
+  // Determine if current user has administrative permissions (aligned with server/src/middleware/authMiddleware.js)
+  const userEmail = (currentUser?.email || studentProfile?.email || '').toLowerCase();
+  const configuredAdminEmails = ['admin@educonnect.ac.in', 'admin@educonnect.com'];
+  const isAdmin = Boolean(
+    studentProfile?.role === 'admin' ||
+    (userEmail && (
+      configuredAdminEmails.includes(userEmail) ||
+      userEmail.endsWith('@admin.educonnect.internal')
+    ))
+  );
+
   return (
     <AuthContext.Provider
       value={{
         currentUser,
         studentProfile,
+        isAdmin,
         loading,
         authError,
         registerStudent,
         loginStudent,
         logoutStudent,
-        updateProfile
+        sendPasswordReset,
+        updateProfile,
+        refreshStudentProfile
       }}
     >
       {children}

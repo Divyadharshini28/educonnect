@@ -2,10 +2,100 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Centralized Typography Scale Tokens (Phase 3) */
+  --font-size-page-title: 1.875rem;    /* 30px desktop reference */
+  --font-size-section-title: 1.5rem;    /* 24px major sections */
+  --font-size-card-title: 1.25rem;      /* 20px card & subsection headings */
+  --font-size-body: 1rem;               /* 16px standard body text */
+  --font-size-label: 0.875rem;          /* 14px form labels and inputs */
+  --font-size-button: 0.9375rem;        /* 15px interactive actions */
+  --font-size-helper: 0.875rem;         /* 14px secondary helper text */
+  --font-size-caption: 0.8125rem;       /* 13px supplementary notes */
+  --font-size-badge: 0.75rem;           /* 12px status indicators (min 12px) */
+}
+
 @layer base {
+  * {
+    border-color: #E4E0D8;
+  }
+
   body {
-    background-color: #F8FAFC;
-    color: #0F172A;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    background-color: #FAF8F4;
+    color: #1A1A1A;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: var(--font-size-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fraunces', 'Newsreader', Georgia, serif;
+    color: #1A1A1A;
+    font-feature-settings: "liga" 1, "kern" 1;
+  }
+
+  ::selection {
+    background-color: #F6E7DE;
+    color: #1A1A1A;
+  }
+
+  :focus-visible {
+    outline: 2px solid #C2410C;
+    outline-offset: 2px;
+  }
+
+  /* Restrain native details markers to clean print style */
+  details > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .typography-page-title {
+    font-family: 'Fraunces', 'Newsreader', Georgia, serif;
+    font-size: var(--font-size-page-title);
+    line-height: 1.25;
+    font-weight: 600;
+  }
+  .typography-section-title {
+    font-family: 'Fraunces', 'Newsreader', Georgia, serif;
+    font-size: var(--font-size-section-title);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+  .typography-card-title {
+    font-size: var(--font-size-card-title);
+    line-height: 1.35;
+    font-weight: 600;
+  }
+  .typography-body {
+    font-size: var(--font-size-body);
+    line-height: 1.6;
+  }
+  .typography-label {
+    font-size: var(--font-size-label);
+    font-weight: 500;
+  }
+  .typography-button {
+    font-size: var(--font-size-button);
+    font-weight: 500;
+  }
+  .typography-helper {
+    font-size: var(--font-size-helper);
+    line-height: 1.5;
+  }
+  .typography-caption {
+    font-size: var(--font-size-caption);
+    line-height: 1.4;
+  }
+  .typography-badge {
+    font-size: var(--font-size-badge);
+    font-weight: 600;
   }
 }

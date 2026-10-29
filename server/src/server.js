@@ -15,6 +15,12 @@ const authRoutes = require('./routes/authRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const opportunityRoutes = require('./routes/opportunityRoutes');
 const applicationRoutes = require('./routes/applicationRoutes');
+const syncRoutes = require('./routes/syncRoutes');
+const interactionRoutes = require('./routes/interactionRoutes');
+const recommendationRoutes = require('./routes/recommendationRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+const resumeRoutes = require('./routes/resumeRoutes');
+const { startSyncScheduler } = require('./services/syncScheduler');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,9 +40,19 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/student/resume', resumeRoutes);
+app.use('/api/student/resume', resumeRoutes);
 app.use('/student', studentRoutes);
 app.use('/opportunities', opportunityRoutes);
 app.use('/applications', applicationRoutes);
+app.use('/api/sync', syncRoutes);
+app.use('/sync', syncRoutes);
+app.use('/api/interactions', interactionRoutes);
+app.use('/interactions', interactionRoutes);
+app.use('/api/recommendations', recommendationRoutes);
+app.use('/recommendations', recommendationRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/notifications', notificationRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: `Route not found: ${req.method} ${req.originalUrl}` });
@@ -60,6 +76,9 @@ async function startServer() {
       console.log('No opportunities found in database. Initializing catalog...');
       await seedDatabase();
     }
+
+    // Start automated opportunity synchronization scheduler if enabled and not in test environment
+    startSyncScheduler();
 
     const server = app.listen(PORT, () => {
       console.log(`EduConnect API Server running on port ${PORT}`);

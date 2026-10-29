@@ -4,7 +4,8 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -59,5 +60,6 @@ export {
   createUserWithEmailAndPassword, 
   signOut, 
   onAuthStateChanged,
+  sendPasswordResetEmail,
   configured as isFirebaseClientConfigured
 };

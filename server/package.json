@@ -7,16 +7,32 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "seed": "node src/seed/seedData.js",
-    "test": "node src/tests/runTests.js"
+    "test": "node src/tests/runTests.js",
+    "test:b4": "node src/tests/testBatch4Features.js",
+    "test:b5": "node src/tests/testBatch5SyncReliability.js",
+    "test:b6": "node src/tests/testBatch6ResumeIntelligence.js",
+    "test:analytics": "node src/tests/testBatch4StudentAnalytics.js",
+    "test:p8": "node src/tests/testPhase8.js",
+    "test:p9": "node src/tests/testPhase9.js",
+    "test:p9_5": "node src/tests/testPhase9_5.js",
+    "test:p10": "node src/tests/testPhase10.js",
+    "test:audit": "node src/tests/testPhase9DataAudit.js",
+    "train:ml": "node src/scripts/trainML.js",
+    "audit:ml-data": "node src/scripts/auditMLData.js",
+    "provision:admin": "node src/scripts/provisionAdmin.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "firebase-admin": "^14.3.0",
+    "mammoth": "^1.13.0",
     "mongodb-memory-server": "^10.1.3",
     "mongoose": "^8.9.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "multer": "^2.4.0",
+    "node-cron": "^4.6.0",
+    "pdf-parse": "^2.4.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

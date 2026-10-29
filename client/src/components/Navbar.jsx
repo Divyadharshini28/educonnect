@@ -1,145 +1,183 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { 
-  Compass, 
-  FileText, 
-  User, 
-  LogOut, 
-  Layers,
-  GraduationCap
-} from 'lucide-react';
+import NotificationCenter from './NotificationCenter';
 
-export default function Navbar({ onOpenAuth }) {
-  const { studentProfile, logoutStudent } = useAuth();
+export default function Navbar() {
+  const { studentProfile, currentUser, isAdmin, logoutStudent } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path;
+  // If in the Admin Portal, suppress the student Navbar in favor of AdminLayout
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
+
+  const handleSignOut = async () => {
+    await logoutStudent();
+    navigate('/login');
+  };
+
+  const navLinkClass = ({ isActive }) =>
+    isActive
+      ? 'text-accent border-b-2 border-accent pb-1 font-medium transition-colors'
+      : 'text-muted hover:text-ink pb-1 border-b-2 border-transparent transition-colors';
+
+  const userInitial = studentProfile?.name
+    ? studentProfile.name.trim().charAt(0).toUpperCase()
+    : currentUser?.email
+    ? currentUser.email.charAt(0).toUpperCase()
+    : 'S';
 
   return (
-    <nav className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand */}
-          <div className="flex items-center space-x-3">
-            <Link to="/" className="flex items-center space-x-2.5">
-              <div className="w-9 h-9 rounded-lg bg-brand-800 flex items-center justify-center text-white shadow-sm">
-                <GraduationCap className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-lg font-bold text-slate-900 tracking-tight">EduConnect</span>
-                <span className="text-[11px] text-slate-500 font-medium hidden sm:block leading-none">
-                  Student Opportunity Platform
-                </span>
-              </div>
-            </Link>
-          </div>
+    <header className="border-b border-line bg-paper sticky top-0 z-30">
+      <div className="max-w-[768px] mx-auto px-4">
+        {/* Desktop Header Layout */}
+        <div className="hidden sm:flex items-center justify-between h-16">
+          {/* Brand Wordmark */}
+          <Link
+            to="/home"
+            className="font-serif text-[22px] font-semibold tracking-tight text-ink hover:text-accent transition-colors shrink-0 mr-8"
+          >
+            EduConnect
+          </Link>
 
-          {/* Navigation Links */}
-          {studentProfile ? (
-            <div className="hidden md:flex items-center space-x-1">
-              <Link
-                to="/recommendations"
-                className={`flex items-center space-x-2 px-3 py-2 rounded-md text-xs font-semibold transition-colors ${
-                  isActive('/recommendations')
-                    ? 'bg-brand-50 text-brand-800 border border-brand-200'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
-              >
-                <Layers className="w-4 h-4 text-brand-700" />
-                <span>Recommendations</span>
-              </Link>
+          {/* Primary Navigation — 14–15px, comfortable 24–28px spacing */}
+          <nav className="flex items-center gap-6 sm:gap-7 text-[14px] sm:text-[15px] font-medium">
+            <NavLink to="/home" className={navLinkClass}>
+              Home
+            </NavLink>
+            <NavLink to="/recommended" className={navLinkClass}>
+              Recommended
+            </NavLink>
+            <NavLink to="/browse" className={navLinkClass}>
+              Browse
+            </NavLink>
+            <NavLink to="/applications" className={navLinkClass}>
+              Applications
+            </NavLink>
+            <NavLink to="/analytics" className={navLinkClass}>
+              Analytics
+            </NavLink>
+            {isAdmin && (
+              <NavLink to="/admin" className={navLinkClass}>
+                Admin
+              </NavLink>
+            )}
+          </nav>
 
-              <Link
-                to="/opportunities"
-                className={`flex items-center space-x-2 px-3 py-2 rounded-md text-xs font-semibold transition-colors ${
-                  isActive('/opportunities')
-                    ? 'bg-brand-50 text-brand-800 border border-brand-200'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
-              >
-                <Compass className="w-4 h-4 text-slate-500" />
-                <span>Opportunity Catalog</span>
-              </Link>
-
-              <Link
-                to="/applications"
-                className={`flex items-center space-x-2 px-3 py-2 rounded-md text-xs font-semibold transition-colors ${
-                  isActive('/applications')
-                    ? 'bg-brand-50 text-brand-800 border border-brand-200'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
-              >
-                <FileText className="w-4 h-4 text-slate-500" />
-                <span>My Applications</span>
-              </Link>
-
-              <Link
-                to="/profile"
-                className={`flex items-center space-x-2 px-3 py-2 rounded-md text-xs font-semibold transition-colors ${
-                  isActive('/profile')
-                    ? 'bg-brand-50 text-brand-800 border border-brand-200'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
-              >
-                <User className="w-4 h-4 text-slate-500" />
-                <span>Profile Setup</span>
-              </Link>
-            </div>
-          ) : (
-            <div className="hidden md:flex items-center space-x-4 text-xs font-semibold text-slate-600">
-              <Link to="/opportunities" className="hover:text-brand-800 transition-colors">
-                Explore Catalog
-              </Link>
-            </div>
-          )}
-
-          {/* User actions */}
-          <div className="flex items-center space-x-3">
-            {studentProfile ? (
-              <div className="flex items-center space-x-3">
-                <Link 
-                  to="/profile" 
-                  className="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-brand-300 hover:bg-slate-50 transition-colors text-left"
+          {/* Profile & Account Actions */}
+          <div className="flex items-center gap-3.5 shrink-0 ml-8">
+            {currentUser ? (
+              <>
+                <NotificationCenter />
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 text-muted hover:text-ink transition-colors text-[14px] sm:text-[15px] font-medium"
+                  title="View student profile"
                 >
-                  <div className="w-7 h-7 rounded-full bg-brand-100 text-brand-800 font-bold text-xs flex items-center justify-center border border-brand-200">
-                    {studentProfile.name ? studentProfile.name.charAt(0).toUpperCase() : 'S'}
-                  </div>
-                  <div className="hidden lg:block text-xs">
-                    <p className="font-semibold text-slate-800 leading-tight">{studentProfile.name}</p>
-                    <p className="text-[11px] text-slate-500">
-                      {studentProfile.department || 'Student'} • CGPA {studentProfile.cgpa ? Number(studentProfile.cgpa).toFixed(2) : '0.00'}
-                    </p>
-                  </div>
+                  <span className="w-7 h-7 rounded-full border border-line flex items-center justify-center text-xs font-semibold text-ink bg-paper">
+                    {userInitial}
+                  </span>
+                  <span>Profile</span>
                 </Link>
-
                 <button
-                  onClick={logoutStudent}
-                  title="Sign Out"
-                  className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+                  type="button"
+                  onClick={handleSignOut}
+                  className="text-muted hover:text-ink transition-colors text-sm font-medium ml-1"
                 >
-                  <LogOut className="w-4 h-4" />
+                  Sign out
                 </button>
-              </div>
+              </>
             ) : (
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => onOpenAuth('login')}
-                  className="px-3.5 py-1.5 rounded-md text-xs font-semibold text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors"
+              <div className="flex items-center gap-3 text-[14px] sm:text-[15px] font-medium">
+                <Link
+                  to="/login"
+                  className="text-muted hover:text-ink transition-colors"
                 >
-                  Sign In
-                </button>
-                <button
-                  onClick={() => onOpenAuth('register')}
-                  className="px-3.5 py-1.5 rounded-md text-xs font-semibold text-white bg-brand-800 hover:bg-brand-900 shadow-sm transition-colors"
+                  Sign in
+                </Link>
+                <Link
+                  to="/signup"
+                  className="text-accent hover:text-accent-hover font-medium transition-colors"
                 >
-                  Register
-                </button>
+                  Sign up
+                </Link>
               </div>
             )}
           </div>
         </div>
+
+        {/* Mobile Header Layout — Clean 2-Row Editorial Navigation */}
+        <div className="sm:hidden pt-3 pb-2">
+          {/* Top Row: Wordmark + Profile / Sign in */}
+          <div className="flex items-center justify-between pb-2.5">
+            <Link
+              to="/home"
+              className="font-serif text-xl font-semibold tracking-tight text-ink hover:text-accent transition-colors"
+            >
+              EduConnect
+            </Link>
+
+            <div className="flex items-center gap-3 text-sm">
+              {currentUser ? (
+                <>
+                  <NotificationCenter />
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-1.5 text-muted hover:text-ink font-medium"
+                  >
+                    <span className="w-6 h-6 rounded-full border border-line flex items-center justify-center text-xs font-medium text-ink bg-paper">
+                      {userInitial}
+                    </span>
+                    <span>Profile</span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="text-muted hover:text-ink text-sm font-medium"
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <div className="flex items-center gap-3 text-sm font-medium">
+                  <Link to="/login" className="text-muted hover:text-ink">
+                    Sign in
+                  </Link>
+                  <Link to="/signup" className="text-accent font-medium">
+                    Sign up
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Bottom Row: Full 14px Readable Navigation Links with active underline */}
+          <nav className="flex items-center justify-between text-[14px] font-medium pt-2 border-t border-line/60 overflow-x-auto gap-4">
+            <NavLink to="/home" className={navLinkClass}>
+              Home
+            </NavLink>
+            <NavLink to="/recommended" className={navLinkClass}>
+              Recommended
+            </NavLink>
+            <NavLink to="/browse" className={navLinkClass}>
+              Browse
+            </NavLink>
+            <NavLink to="/applications" className={navLinkClass}>
+              Applications
+            </NavLink>
+            <NavLink to="/analytics" className={navLinkClass}>
+              Analytics
+            </NavLink>
+            {isAdmin && (
+              <NavLink to="/admin" className={navLinkClass}>
+                Admin
+              </NavLink>
+            )}
+          </nav>
+        </div>
       </div>
-    </nav>
+    </header>
   );
 }

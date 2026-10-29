@@ -44,6 +44,30 @@ const studentSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  preferredLocation: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  bookmarks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Opportunity'
+  }],
+  role: {
+    type: String,
+    enum: ['student', 'admin'],
+    default: 'student',
+    index: true
+  },
+  resume: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Resume',
+    default: null
+  },
+  lastResumeUploadAt: {
+    type: Date,
+    default: null
+  },
   createdAt: {
     type: Date,
     default: Date.now

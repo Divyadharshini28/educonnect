@@ -8,7 +8,7 @@ const { syncToDisk } = require('../config/dbPersistence');
  */
 exports.register = async (req, res) => {
   try {
-    const { name, department, year, cgpa, skills, interests } = req.body;
+    const { name, department, year, cgpa, skills, interests, preferredLocation } = req.body;
     const firebaseUID = req.firebaseUID;
     const firebaseEmail = req.firebaseEmail || req.student?.email;
 
@@ -25,6 +25,7 @@ exports.register = async (req, res) => {
       if (cgpa !== undefined) student.cgpa = Number(cgpa);
       if (skills !== undefined) student.skills = Array.isArray(skills) ? skills : [];
       if (interests !== undefined) student.interests = Array.isArray(interests) ? interests : [];
+      if (preferredLocation !== undefined) student.preferredLocation = typeof preferredLocation === 'string' ? preferredLocation.trim() : '';
     } else {
       student = new Student({
         firebaseUID,
@@ -34,7 +35,8 @@ exports.register = async (req, res) => {
         year: year !== undefined ? Number(year) : 1,
         cgpa: cgpa !== undefined ? Number(cgpa) : 0,
         skills: Array.isArray(skills) ? skills : [],
-        interests: Array.isArray(interests) ? interests : []
+        interests: Array.isArray(interests) ? interests : [],
+        preferredLocation: typeof preferredLocation === 'string' ? preferredLocation.trim() : ''
       });
     }
 

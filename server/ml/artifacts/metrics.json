@@ -1,0 +1,60 @@
+{
+  "model": "RandomForestClassifier",
+  "status": "trained",
+  "available": true,
+  "trained_at": "2026-10-03T16:59:42.164554+00:00",
+  "training_samples": 21,
+  "test_samples": 6,
+  "total_samples": 27,
+  "class_distribution": {
+    "0": 8,
+    "1": 19
+  },
+  "features": [
+    "departmentMatch",
+    "yearEligible",
+    "cgpaEligible",
+    "cgpaDiff",
+    "skillMatchRatio",
+    "interestMatchRatio",
+    "typeMatch",
+    "modeMatch",
+    "hasPriorInteraction",
+    "priorInteractionCount",
+    "hasBookmarked",
+    "hasApplied",
+    "deadlineDays",
+    "semanticCosineSim"
+  ],
+  "feature_importances": {
+    "cgpaDiff": 0.1932,
+    "semanticCosineSim": 0.18,
+    "yearEligible": 0.129,
+    "departmentMatch": 0.1109,
+    "deadlineDays": 0.0925,
+    "cgpaEligible": 0.0887,
+    "interestMatchRatio": 0.0771,
+    "skillMatchRatio": 0.0743,
+    "typeMatch": 0.0348,
+    "hasPriorInteraction": 0.0132,
+    "priorInteractionCount": 0.0062,
+    "modeMatch": 0.0,
+    "hasBookmarked": 0.0,
+    "hasApplied": 0.0
+  },
+  "accuracy": 0.8333,
+  "precision": 0.8,
+  "recall": 1.0,
+  "f1": 0.8889,
+  "roc_auc": 1.0,
+  "confusion_matrix": [
+    [
+      1,
+      1
+    ],
+    [
+      0,
+      4
+    ]
+  ]
+}

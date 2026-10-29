@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { X, Send, AlertCircle, CheckCircle2, Building2, ExternalLink, User } from 'lucide-react';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import { trackApply, trackClick } from '../services/interactionTracker';
 
 export default function ApplyModal({ opportunity, onClose, onSuccess }) {
   const { studentProfile } = useAuth();
   const [resumeUrl, setResumeUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [submittedApp, setSubmittedApp] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
 
   if (!opportunity) return null;
+
+  const isExternal = Boolean(opportunity.source && opportunity.source !== 'internal');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +22,7 @@ export default function ApplyModal({ opportunity, onClose, onSuccess }) {
     try {
       const res = await api.post('/applications', {
         opportunityId: opportunity._id,
+        applicationMethod: isExternal ? 'external-link' : 'internal',
         responses: {
           resumeUrl: resumeUrl.trim(),
           studentName: studentProfile?.name || '',
@@ -29,127 +32,166 @@ export default function ApplyModal({ opportunity, onClose, onSuccess }) {
       });
 
       const app = res.data.application;
-      setSubmittedApp(app);
+      trackApply(opportunity._id, { source: isExternal ? 'apply-modal-external' : 'apply-modal-internal' });
+      setSubmitted(true);
       if (onSuccess) {
         onSuccess(app);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to submit application. Please try again.');
+      setError(err.response?.data?.message || 'We could not submit your application. Try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200 relative animate-scaleUp">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {submittedApp ? (
-          <div className="py-3 text-center">
-            <div className="w-11 h-11 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto mb-3">
-              <CheckCircle2 className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 mb-1">Application Submitted</h3>
-            <p className="text-xs text-slate-600 mb-5 max-w-sm mx-auto leading-relaxed">
-              Your application has been registered in your tracking dashboard.
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="apply-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40"
+    >
+      <div className="w-full max-w-[480px] border border-line bg-paper rounded-[4px] p-6 text-ink">
+        {submitted ? (
+          <div className="space-y-4">
+            <h2 id="apply-modal-title" className="font-serif text-xl sm:text-2xl font-semibold">
+              {isExternal ? 'External application recorded' : 'Application submitted'}
+            </h2>
+            <p className="text-sm text-muted leading-relaxed">
+              {isExternal
+                ? `Your application for ${opportunity.title} is now recorded in your tracker as student-reported. You can update your progress on the Applications page.`
+                : `Your application for ${opportunity.title} is now submitted and listed under Applications.`}
             </p>
 
             {opportunity.officialUrl && (
-              <div className="mb-5 p-3.5 bg-brand-50 border border-brand-200 rounded-lg text-left">
-                <p className="text-xs font-semibold text-brand-900 mb-0.5">Official Portal Link</p>
-                <p className="text-[11px] text-slate-600 mb-2.5">
-                  Complete any external registration requirements directly on the official host website.
+              <div className="pt-3 border-t border-line text-sm">
+                <p className="text-muted mb-2">
+                  {isExternal
+                    ? 'Important: Complete your submission on the provider’s portal if you have not already done so:'
+                    : 'External portal submission link:'}
                 </p>
                 <a
                   href={opportunity.officialUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-800 hover:bg-brand-900 text-white rounded-md text-xs font-semibold shadow-sm transition-colors"
+                  onClick={() => {
+                    trackClick(opportunity._id, {
+                      source: 'apply-modal-external-link',
+                      targetUrl: opportunity.officialUrl,
+                      action: 'open-external-application-portal'
+                    });
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded border border-line bg-canvas hover:border-ink text-accent hover:text-accent-hover font-medium transition-colors text-xs sm:text-sm"
                 >
-                  <span>Open Official Application Portal</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Open official application page</span>
+                  <span>↗</span>
                 </a>
               </div>
             )}
 
-            <button
-              onClick={onClose}
-              className="w-full py-2 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
-            >
-              Return to Opportunities
-            </button>
+            <div className="pt-4 border-t border-line flex justify-end">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-sm rounded-[4px] bg-ink text-paper hover:opacity-90 font-medium"
+              >
+                Close
+              </button>
+            </div>
           </div>
         ) : (
           <div>
-            <div className="mb-4">
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-brand-50 text-brand-800 border border-brand-200">
-                {opportunity.type}
-              </span>
-              <h2 className="text-base font-bold text-slate-900 mt-2">
-                {opportunity.title}
-              </h2>
-              <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                <Building2 className="w-3.5 h-3.5" />
-                {opportunity.organization} • {opportunity.stipendOrReward || 'Eligible'}
-              </p>
+            <div className="flex items-start justify-between gap-4 border-b border-line pb-4 mb-4">
+              <div>
+                <span className="text-xs font-semibold text-accent uppercase tracking-wider">
+                  {opportunity.type}
+                </span>
+                <h2 id="apply-modal-title" className="font-serif text-xl font-semibold mt-1">
+                  {isExternal ? 'Record external application' : 'Submit application'}
+                </h2>
+                <p className="text-sm text-muted mt-0.5">
+                  {opportunity.title} · {opportunity.organization || opportunity.source}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="text-muted hover:text-ink text-sm font-medium"
+                aria-label="Close dialog"
+              >
+                Cancel
+              </button>
             </div>
 
-            {error && (
-              <div className="mb-4 p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>{error}</span>
+            {isExternal && (
+              <div className="mb-4 p-3 rounded bg-canvas border border-line text-xs text-muted leading-relaxed">
+                <span className="font-semibold text-ink block mb-1">External Opportunity Notice</span>
+                This opportunity is hosted externally by <span className="font-medium text-ink">{opportunity.organization || opportunity.source}</span>.
+                Recording your application here logs it in your EduConnect tracker as student-reported.
+                {opportunity.officialUrl && (
+                  <div className="mt-2 pt-2 border-t border-line/60">
+                    <a
+                      href={opportunity.officialUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-accent underline font-medium hover:text-accent-hover"
+                    >
+                      Visit official portal first ↗
+                    </a>
+                  </div>
+                )}
               </div>
             )}
 
-            {/* Student Verified Profile Preview */}
-            <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs space-y-1">
-              <p className="text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1 flex items-center gap-1">
-                <User className="w-3 h-3 text-slate-500" />
-                Applicant Details
+            {error && (
+              <p className="text-sm text-bad mb-4" role="alert">
+                {error}
               </p>
-              <div className="grid grid-cols-2 gap-1 text-[11px] text-slate-600">
-                <p><span className="font-semibold text-slate-700">Name:</span> {studentProfile?.name || 'Student'}</p>
-                <p><span className="font-semibold text-slate-700">Email:</span> {studentProfile?.email || 'N/A'}</p>
-                <p><span className="font-semibold text-slate-700">Branch:</span> {studentProfile?.department || 'N/A'}</p>
-                <p><span className="font-semibold text-slate-700">CGPA:</span> {studentProfile?.cgpa ? Number(studentProfile?.cgpa).toFixed(2) : 'N/A'}</p>
-              </div>
+            )}
+
+            <div className="text-sm text-muted mb-4 border-b border-line pb-4">
+              <p className="text-xs uppercase tracking-wider font-semibold text-muted mb-1">
+                Applicant details
+              </p>
+              <p className="text-ink font-medium">
+                {studentProfile?.name || 'Student'} ({studentProfile?.department || 'General'}, Year {studentProfile?.year || 1})
+              </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Resume / Portfolio Document URL (Optional)
+                <label
+                  htmlFor="resumeUrl"
+                  className="block text-xs sm:text-sm uppercase tracking-wider text-muted font-medium mb-1.5"
+                >
+                  Portfolio or resume link (optional)
                 </label>
                 <input
+                  id="resumeUrl"
                   type="url"
-                  placeholder="https://drive.google.com/... or portfolio link"
+                  placeholder="https://..."
                   value={resumeUrl}
                   onChange={(e) => setResumeUrl(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-brand-800 focus:border-brand-800"
+                  className="w-full text-sm sm:text-base px-3 py-2 border border-line rounded-[4px] bg-paper text-ink focus:border-ink focus:outline-none"
                 />
               </div>
 
-              <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+              <div className="pt-3 border-t border-line flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-3.5 py-1.5 rounded-md text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
+                  className="text-sm text-muted hover:text-ink"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-4 py-1.5 rounded-md text-xs font-semibold text-white bg-brand-800 hover:bg-brand-900 transition-colors shadow-sm flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-4 py-2 text-sm rounded-[4px] bg-accent text-white hover:bg-accent-hover font-medium transition-colors disabled:opacity-50"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>{loading ? 'Submitting...' : 'Confirm and Submit Application'}</span>
+                  {loading
+                    ? (isExternal ? 'Recording...' : 'Submitting...')
+                    : (isExternal ? 'Record external application' : 'Submit application')}
                 </button>
               </div>
             </form>

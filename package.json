@@ -13,7 +13,19 @@
     "client:build": "npm --prefix client run build",
     "seed": "npm --prefix server run seed",
     "test": "npm --prefix server test",
-    "test:server": "npm --prefix server test"
+    "test:server": "npm --prefix server test",
+    "test:b4": "npm --prefix server run test:b4",
+    "test:b5": "npm --prefix server run test:b5",
+    "test:b6": "npm --prefix server run test:b6",
+    "test:analytics": "npm --prefix server run test:analytics",
+    "test:p8": "npm --prefix server run test:p8",
+    "test:p9": "npm --prefix server run test:p9",
+    "test:p9_5": "npm --prefix server run test:p9_5",
+    "test:p10": "npm --prefix server run test:p10",
+    "test:audit": "npm --prefix server run test:audit",
+    "train:ml": "npm --prefix server run train:ml",
+    "audit:ml-data": "npm --prefix server run audit:ml-data",
+    "provision:admin": "node server/src/scripts/provisionAdmin.js"
   },
   "keywords": [
     "mern",

@@ -7,34 +7,56 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#F0F5FF',
-          100: '#E0EAFF',
-          200: '#C7D7FE',
-          300: '#A4BCFD',
-          400: '#6172F3',
-          500: '#3B82F6',
-          600: '#2563EB', // Accent Royal Blue
-          700: '#1D4ED8',
-          800: '#1E40AF', // Primary Deep Navy Blue
-          900: '#1E3A8A',
-          950: '#0F172A'  // Heading Slate Navy
+        paper: '#FAF8F4',
+        ink: '#1A1A1A',
+        muted: '#6B6B6B',
+        line: '#E4E0D8',
+        accent: {
+          DEFAULT: '#C2410C',
+          soft: '#F6E7DE',
+          hover: '#9A3412',
         },
-        slate: {
-          50: '#F8FAFC',
-          100: '#F1F5F9',
-          200: '#E2E8F0',
-          300: '#CBD5E1',
-          400: '#94A3B8',
-          500: '#64748B',
-          600: '#475569',
-          700: '#334155',
-          800: '#1E293B',
-          900: '#0F172A',
-        }
+        ok: '#2F6B3F',
+        warn: '#8A5A00',
+        bad: '#9B2C2C',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        serif: ['Fraunces', 'Newsreader', 'Georgia', 'serif'],
+        sans: ['Inter', 'Geist', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+      },
+      fontSize: {
+        'page-title': ['var(--font-size-page-title)', { lineHeight: '1.25' }],
+        'section-title': ['var(--font-size-section-title)', { lineHeight: '1.3' }],
+        'card-title': ['var(--font-size-card-title)', { lineHeight: '1.35' }],
+        'body': ['var(--font-size-body)', { lineHeight: '1.6' }],
+        'label': ['var(--font-size-label)', { lineHeight: '1.4' }],
+        'button': ['var(--font-size-button)', { lineHeight: '1.4' }],
+        'helper': ['var(--font-size-helper)', { lineHeight: '1.5' }],
+        'caption': ['var(--font-size-caption)', { lineHeight: '1.4' }],
+        'badge': ['var(--font-size-badge)', { lineHeight: '1.2' }],
+      },
+      borderRadius: {
+        DEFAULT: '4px',
+        none: '0px',
+        sm: '4px',
+        md: '4px',
+        lg: '4px',
+        xl: '4px',
+        '2xl': '4px',
+        full: '9999px',
+      },
+      boxShadow: {
+        none: 'none',
+        DEFAULT: 'none',
+        sm: 'none',
+        md: 'none',
+        lg: 'none',
+        xl: 'none',
+        '2xl': 'none',
+      },
+      maxWidth: {
+        editorial: '768px',
+        form: '448px',
       }
     },
   },

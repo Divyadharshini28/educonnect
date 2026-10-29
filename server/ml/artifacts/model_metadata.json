@@ -1,0 +1,49 @@
+{
+  "model": "RandomForestClassifier",
+  "version": "1.0.0",
+  "trained_at": "2026-10-03T16:59:42.164554+00:00",
+  "features": [
+    "departmentMatch",
+    "yearEligible",
+    "cgpaEligible",
+    "cgpaDiff",
+    "skillMatchRatio",
+    "interestMatchRatio",
+    "typeMatch",
+    "modeMatch",
+    "hasPriorInteraction",
+    "priorInteractionCount",
+    "hasBookmarked",
+    "hasApplied",
+    "deadlineDays",
+    "semanticCosineSim"
+  ],
+  "n_estimators": 50,
+  "max_depth": 5,
+  "random_state": 42,
+  "class_weight": "balanced",
+  "training_samples": 21,
+  "test_samples": 6,
+  "metrics": {
+    "accuracy": 0.8333,
+    "precision": 0.8,
+    "recall": 1.0,
+    "f1": 0.8889,
+    "roc_auc": 1.0
+  },
+  "label_strategy": {
+    "positive_label_1": [
+      "APPLY",
+      "BOOKMARK",
+      "Submitted Application"
+    ],
+    "negative_label_0": [
+      "DISMISS",
+      "Explicit Dismissal"
+    ],
+    "neutral_excluded": [
+      "VIEW",
+      "CLICK"
+    ]
+  }
+}

@@ -244,12 +244,18 @@ async function seedDatabase() {
   try {
     console.log('Seeding EduConnect catalog opportunities...');
     for (const opp of sampleOpportunities) {
+      opp.isActive = opp.isActive !== false;
+      opp.status = opp.status || 'ACTIVE';
       await Opportunity.updateOne(
         { _id: opp._id },
         { $set: opp },
         { upsert: true }
       );
     }
+    await Opportunity.updateMany(
+      { isActive: { $exists: false } },
+      { $set: { isActive: true, status: 'ACTIVE' } }
+    );
     const count = await Opportunity.countDocuments();
     console.log(`Successfully seeded/ensured ${count} opportunities in database.`);
     return { opportunitiesCount: count };
